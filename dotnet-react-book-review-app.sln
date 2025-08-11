@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-react-book-review-app.Server", "dotnet-react-book-review-app\dotnet-react-book-review-app.Server\dotnet-react-book-review-app.Server.csproj", "{65E8A595-25F3-4697-82DE-4E8CAA90BE0F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{65E8A595-25F3-4697-82DE-4E8CAA90BE0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65E8A595-25F3-4697-82DE-4E8CAA90BE0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65E8A595-25F3-4697-82DE-4E8CAA90BE0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65E8A595-25F3-4697-82DE-4E8CAA90BE0F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
