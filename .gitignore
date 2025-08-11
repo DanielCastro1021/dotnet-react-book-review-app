@@ -1,5 +1,57 @@
+# Ignore build output and IDE files
 bin/
 obj/
-/packages/
+
+# Rider and JetBrains
+.idea/
 riderModule.iml
-/_ReSharper.Caches/
+_ReSharper.Caches/
+
+# NuGet packages
+/packages/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS Code
+.vscode/
+
+# Mac system files
+.DS_Store
+
+# Logs
+*.log
+
+# Database
+*.db
+
+# Entity Framework
+Migrations/
+
+# Misc
+*.dbmdl
+*.pdb
+*.cache
+*.vspscc
+*.vssscc
+*.vspcc
+*.ncrunch*
+.localhistory/
+*.sln.iml
+
+# Node/React (if present in repo)
+node_modules/
+dist/
+build/
+.env
+.env.*
+.cache/
+.vite/
+*.local
+coverage/
+
+# Editor workspace
+*.code-workspace
