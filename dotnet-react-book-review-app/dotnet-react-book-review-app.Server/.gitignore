@@ -1,0 +1,37 @@
+# Build
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.dbmdl
+*.dbmdl*
+*.pdb
+*.cache
+*.log
+*.vspscc
+*.vssscc
+*.vspcc
+*.vs/
+*.ncrunch*
+*.localhistory/
+*.DS_Store
+
+# Entity Framework
+Migrations/
+app.db
+
+# Rider
+.idea/
+*.sln.iml
+
+# Mac
+.DS_Store
+
+# Logs
+*.log
+
+# Editor
+*.code-workspace
+
