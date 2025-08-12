@@ -43,4 +43,15 @@ public class ReviewService(ApplicationDbContext context)
             await context.SaveChangesAsync();
         }
     }
+
+    public async Task<int> CountAsync()
+    {
+       return await context.Reviews.CountAsync();
+    }
+    
+    public async Task<double> AverageRatingAsync()
+    {
+        var reviews = await context.Reviews.ToListAsync();
+        return reviews.Any() ? reviews.Average(r => r.Rating) : 0.0;
+    }
 }

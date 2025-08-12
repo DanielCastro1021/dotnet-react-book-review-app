@@ -2,11 +2,12 @@ using dotnet_react_book_review_app.Server.Models;
 using dotnet_react_book_review_app.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 namespace dotnet_react_book_review_app.Server.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BookController(BookService service): ControllerBase
+public class BookController(BookService service) : ControllerBase
 {
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
@@ -23,6 +24,7 @@ public class BookController(BookService service): ControllerBase
         {
             return NotFound();
         }
+
         return Ok(book);
     }
 
@@ -75,5 +77,12 @@ public class BookController(BookService service): ControllerBase
 
         await service.DeleteAsync(id);
         return NoContent();
+    }
+
+    [HttpGet("count")]
+    public async Task<ActionResult<int>> GetBookCount()
+    {
+        var count = await service.CountAsync();
+        return Ok(count);
     }
 }

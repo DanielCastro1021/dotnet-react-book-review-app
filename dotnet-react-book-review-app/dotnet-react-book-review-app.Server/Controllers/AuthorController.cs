@@ -73,4 +73,11 @@ public class AuthorController(AuthorService service) : ControllerBase
         await service.DeleteAsync(id);
         return NoContent();
     }
+
+    [HttpGet("count")]
+    public async Task<ActionResult<int>> GetAuthorCount()
+    {
+        var count = await service.CountAsync();
+        return Ok(count);
+    }
 }

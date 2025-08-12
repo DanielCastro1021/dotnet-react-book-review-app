@@ -45,4 +45,9 @@ public class BookService(ApplicationDbContext context)
             await context.SaveChangesAsync();
         }
     }
+
+    public async Task<object?> CountAsync()
+    {
+        return await context.Books.CountAsync();
+    }
 }

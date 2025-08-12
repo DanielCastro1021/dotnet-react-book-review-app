@@ -37,4 +37,9 @@ public class AuthorService(ApplicationDbContext context)
             await context.SaveChangesAsync();
         }
     }
+
+    public async Task<int> CountAsync()
+    {
+        return await context.Authors.CountAsync();
+    }
 }

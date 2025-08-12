@@ -23,6 +23,7 @@ coverage/
 *.sln
 *.sw?
 *.code-workspace
+obj/Debug/
 
 # Logs
 npm-debug.log*

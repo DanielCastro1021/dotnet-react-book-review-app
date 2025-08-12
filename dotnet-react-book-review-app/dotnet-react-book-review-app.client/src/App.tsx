@@ -1,56 +1,72 @@
-import { useEffect, useState } from 'react';
-import './App.css';
+import React from "react";
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+import Layout from "./components/Layout/Layout";
+import HomeIndex from "./components/Home/HomeIndex";
 
-interface Forecast {
-    date: string;
-    temperatureC: number;
-    temperatureF: number;
-    summary: string;
-}
+// Author components
+import AuthorList from "./components/Authors/AuthorList";
+import AuthorForm from "./components/Authors/AuthorForm";
+import AuthorDetail from "./components/Authors/AuthorDetail";
 
-function App() {
-    const [forecasts, setForecasts] = useState<Forecast[]>();
+// Category components
+import CategoryList from "./components/Categories/CategoryList";
+import CategoryForm from "./components/Categories/CategoryForm";
+import CategoryDetail from "./components/Categories/CategoryDetail";
 
-    useEffect(() => {
-        populateWeatherData();
-    }, []);
+// Book components
+import BookList from "./components/Books/BookList";
+import BookForm from "./components/Books/BookForm";
+import BookDetail from "./components/Books/BookDetail";
 
-    const contents = forecasts === undefined
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-        : <table className="table table-striped" aria-labelledby="tableLabel">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
-                </tr>
-            </thead>
-            <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.date}>
-                        <td>{forecast.date}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>;
+// Review components
+import ReviewList from "./components/Reviews/ReviewList";
+import ReviewForm from "./components/Reviews/ReviewForm";
+import ReviewDetail from "./components/Reviews/ReviewDetail";
 
-    return (
-        <div>
-            <h1 id="tableLabel">Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
-        </div>
-    );
+// Authentication components
+import Login from "./components/Auth/Login";
+import Register from "./components/Auth/Register";
+import Logout from "./components/Auth/Logout";
+import ProtectedRoute from "./components/Auth/ProtectedRoute";
 
-    async function populateWeatherData() {
-        const response = await fetch('weatherforecast');
-        const data = await response.json();
-        setForecasts(data);
-    }
-}
+const App: React.FC = () => (
+    <Router>
+        <Layout>
+            <Switch>
+                {/* Home Route */}
+                <Route exact path="/" component={HomeIndex}/>
+
+                {/* Authentication Routes */}
+                <Route exact path="/login" component={Login}/>
+                <Route exact path="/register" component={Register}/>
+                <Route exact path="/logout" component={Logout}/>
+
+                {/* Author Routes */}
+                <Route exact path="/authors" component={AuthorList}/>
+                <ProtectedRoute exact path="/authors/create" component={AuthorForm}/>
+                <ProtectedRoute exact path="/authors/edit/:id" component={AuthorForm}/>
+                <Route exact path="/authors/:id" component={AuthorDetail}/>
+
+                {/* Category Routes */}
+                <Route exact path="/categories" component={CategoryList}/>
+                <ProtectedRoute exact path="/categories/create" component={CategoryForm}/>
+                <ProtectedRoute exact path="/categories/edit/:id" component={CategoryForm}/>
+                <Route exact path="/categories/:id" component={CategoryDetail}/>
+
+                {/* Book Routes */}
+                <Route exact path="/books" component={BookList}/>
+                <ProtectedRoute exact path="/books/create" component={BookForm}/>
+                <ProtectedRoute exact path="/books/edit/:id" component={BookForm}/>
+                <Route exact path="/books/:id" component={BookDetail}/>
+
+                {/* Review Routes */}
+                <Route exact path="/reviews" component={ReviewList}/>
+                <ProtectedRoute exact path="/reviews/create" component={ReviewForm}/>
+                <ProtectedRoute exact path="/reviews/edit/:id" component={ReviewForm}/>
+                <Route exact path="/reviews/:id" component={ReviewDetail}/>
+            </Switch>
+        </Layout>
+    </Router>
+);
 
 export default App;

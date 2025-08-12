@@ -78,4 +78,11 @@ public class CategoryController(CategoryService service) : ControllerBase
         await service.DeleteAsync(id);
         return NoContent();
     }
+    
+    [HttpGet("count")]
+    public async Task<ActionResult<int>> GetCategoryCount()
+    {
+        var count = await service.CountAsync();
+        return Ok(count);
+    }
 }

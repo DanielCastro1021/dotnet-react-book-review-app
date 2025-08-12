@@ -78,4 +78,18 @@ public class ReviewController(ReviewService service) : ControllerBase
         await service.DeleteAsync(id);
         return NoContent();
     }
+
+    [HttpGet("count")]
+    public async Task<ActionResult<int>> GetReviewCount()
+    {
+        var count = await service.CountAsync();
+        return Ok(count);
+    }
+
+    [HttpGet("average-rating")]
+    public async Task<ActionResult<double>> GetAverageRating()
+    {
+        var averageRating = await service.AverageRatingAsync();
+        return Ok(averageRating);
+    }
 }
