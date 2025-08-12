@@ -9,7 +9,7 @@ public class Book
 
     [Required] [StringLength(200)] public string Title { get; init; } = string.Empty;
 
-    [StringLength(13)] public string? ISBN { get; init; }
+    [StringLength(17)] public string? Isbn { get; init; }
 
     [StringLength(1000)] public string? Description { get; init; }
 

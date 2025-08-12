@@ -3,15 +3,17 @@ using dotnet_react_book_review_app.Server.Services;
 using dotnet_react_book_review_app.Server.Utils;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Add services to the container.
+// Database connection configuration
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connectionString));
 
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+
+// Add services to the container.
 builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -22,20 +24,11 @@ builder.Services.AddScoped<CategoryService, CategoryService>();
 builder.Services.AddScoped<ReviewService, ReviewService>();
 
 builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-    {
-        // Handle circular references in JSON serialization
-        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
-        // Optional: Preserve references instead of ignoring them
-        // options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-    });
+    .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new() { Title = "Book Review API", Version = "v1" });
-});
+builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Book Review API", Version = "v1" }); });
 
 var app = builder.Build();
 
@@ -54,12 +47,12 @@ if (app.Environment.IsDevelopment())
         var context = services.GetRequiredService<ApplicationDbContext>();
         var logger = services.GetRequiredService<ILogger<Program>>();
 
-        logger.LogInformation("Initializing database tables...");
+        logger.LogInformation("Applying database migrations...");
 
-        // Create custom tables manually since we already have Identity migrations
-        await Utils.CreateCustomTablesAsync(context, logger);
+        // Apply any pending migrations
+        await context.Database.MigrateAsync();
 
-        logger.LogInformation("Database tables initialized successfully.");
+        logger.LogInformation("Database migrations applied successfully.");
 
         // Optional: Seed initial data
         await Utils.SeedDataAsync(context, logger);
