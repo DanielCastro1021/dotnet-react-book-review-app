@@ -38,7 +38,7 @@ const BookList: React.FC = () => {
 
     const filteredBooks = books.filter(book =>
         book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        book.author?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.author?.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         book.category?.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -100,7 +100,7 @@ const BookList: React.FC = () => {
                                     </h5>
                                     <p className="text-muted small mb-2">
                                         <i className="fas fa-user me-1"></i>
-                                        by {book.author?.name || 'Unknown Author'}
+                                        by {book.author?.fullName || 'Unknown Author'}
                                     </p>
                                     <p className="text-muted small mb-2">
                                         <i className="fas fa-tag me-1"></i>
@@ -108,11 +108,11 @@ const BookList: React.FC = () => {
                                     </p>
                                     <p className="text-muted small mb-2">
                                         <i className="fas fa-calendar me-1"></i>
-                                        {new Date(book.publicationDate).getFullYear()}
+                                        {new Date(book.publishedDate).getFullYear()}
                                     </p>
                                     <p className="text-muted small mb-2">
                                         <i className="fas fa-barcode me-1"></i>
-                                        ISBN: {book.isbn}
+                                        ISBN: {book.isbn || 'N/A'}
                                     </p>
                                     <p className="card-text text-muted small">
                                         {book.description && book.description.length > 100 

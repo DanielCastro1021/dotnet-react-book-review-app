@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { bookService, authorService, categoryService, Book, Author, Category } from "../../services/api";
+import { bookService, authorService, categoryService, Author, Category } from "../../services/api";
 
 interface BookFormParams {
     id?: string;
@@ -14,7 +14,7 @@ const BookForm: React.FC = () => {
     const [formData, setFormData] = useState({
         title: '',
         isbn: '',
-        publicationDate: '',
+        publishedDate: '',
         authorId: '',
         categoryId: '',
         description: ''
@@ -58,10 +58,10 @@ const BookForm: React.FC = () => {
             const book = response.data;
             setFormData({
                 title: book.title,
-                isbn: book.isbn,
-                publicationDate: book.publicationDate.split('T')[0],
+                isbn: book.isbn || '',
+                publishedDate: book.publishedDate.split('T')[0],
                 authorId: book.authorId.toString(),
-                categoryId: book.categoryId.toString(),
+                categoryId: book.categoryId?.toString() || '',
                 description: book.description || ''
             });
         } catch (error) {
@@ -98,8 +98,8 @@ const BookForm: React.FC = () => {
             newErrors.isbn = 'ISBN is required';
         }
 
-        if (!formData.publicationDate) {
-            newErrors.publicationDate = 'Publication date is required';
+        if (!formData.publishedDate) {
+            newErrors.publishedDate = 'Publication date is required';
         }
 
         if (!formData.authorId) {
@@ -208,18 +208,18 @@ const BookForm: React.FC = () => {
                                     </div>
                                     <div className="col-md-6">
                                         <div className="mb-3">
-                                            <label htmlFor="publicationDate" className="form-label">
+                                            <label htmlFor="publishedDate" className="form-label">
                                                 Publication Date <span className="text-danger">*</span>
                                             </label>
                                             <input
                                                 type="date"
-                                                className={`form-control ${errors.publicationDate ? 'is-invalid' : ''}`}
-                                                id="publicationDate"
-                                                name="publicationDate"
-                                                value={formData.publicationDate}
+                                                className={`form-control ${errors.publishedDate ? 'is-invalid' : ''}`}
+                                                id="publishedDate"
+                                                name="publishedDate"
+                                                value={formData.publishedDate}
                                                 onChange={handleChange}
                                             />
-                                            {errors.publicationDate && <div className="invalid-feedback">{errors.publicationDate}</div>}
+                                            {errors.publishedDate && <div className="invalid-feedback">{errors.publishedDate}</div>}
                                         </div>
                                     </div>
                                 </div>
@@ -239,8 +239,7 @@ const BookForm: React.FC = () => {
                                             >
                                                 <option value="">Select an author</option>
                                                 {authors.map(author => (
-                                                    <option key={author.id} value={author.id}>
-                                                        {author.name}
+                                                    <option key={author.id} value={author.id}>{author.fullName}
                                                     </option>
                                                 ))}
                                             </select>

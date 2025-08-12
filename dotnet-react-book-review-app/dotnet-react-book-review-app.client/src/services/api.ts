@@ -13,44 +13,44 @@ const api = axios.create({
 // Types
 export interface Author {
     id: number;
-    name: string;
-    biography: string;
-    birthDate: string;
+    firstName: string;
+    lastName: string;
+    fullName: string; // Computed property from backend
+    biography?: string;
+    birthDate?: string;
 }
 
 export interface Category {
     id: number;
     name: string;
-    description: string;
+    description?: string;
 }
 
 export interface Book {
     id: number;
     title: string;
-    isbn: string;
-    publicationDate: string;
+    isbn?: string;
+    description?: string;
+    publishedDate: string; // Changed from publicationDate to match backend
     authorId: number;
-    categoryId: number;
+    categoryId?: number; // Made optional as it can be null
     author?: Author;
     category?: Category;
-    description: string;
 }
 
 export interface Review {
     id: number;
-    bookId: number;
-    reviewerName: string;
+    content: string; // Changed from comment to match backend
     rating: number;
-    comment: string;
-    reviewDate: string;
+    createdDate: string; // Changed from reviewDate to match backend
+    bookId: number;
+    userId: string; // Identity user ID is a string
     book?: Book;
-}
-
-export interface Statistics {
-    totalBooks: number;
-    totalAuthors: number;
-    totalReviews: number;
-    averageRating: number;
+    user?: {
+        id: string;
+        userName: string;
+        email: string;
+    };
 }
 
 // API Services

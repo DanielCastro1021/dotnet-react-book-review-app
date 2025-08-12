@@ -129,11 +129,11 @@ const CategoryDetail: React.FC = () => {
                                                     <h6 className="card-title">{book.title}</h6>
                                                     <p className="card-text small text-muted mb-2">
                                                         <i className="fas fa-user me-1"></i>
-                                                        by {book.author?.name || 'Unknown Author'}
+                                                        by {book.author?.fullName || 'Unknown Author'}
                                                     </p>
                                                     <p className="card-text small text-muted mb-2">
                                                         <i className="fas fa-calendar me-1"></i>
-                                                        Published: {new Date(book.publicationDate).getFullYear()}
+                                                        Published: {new Date(book.publishedDate).getFullYear()}
                                                     </p>
                                                     <p className="card-text small">
                                                         {book.description && book.description.length > 100 

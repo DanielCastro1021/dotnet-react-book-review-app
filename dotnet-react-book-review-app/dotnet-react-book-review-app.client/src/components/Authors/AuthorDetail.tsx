@@ -43,7 +43,7 @@ const AuthorDetail: React.FC = () => {
     const handleDelete = async () => {
         if (!author) return;
         
-        if (window.confirm(`Are you sure you want to delete "${author.name}"?`)) {
+        if (window.confirm(`Are you sure you want to delete "${author.fullName}"?`)) {
             try {
                 await authorService.delete(author.id);
                 history.push('/authors');
@@ -78,7 +78,7 @@ const AuthorDetail: React.FC = () => {
                 <div className="col-lg-8">
                     <div className="card shadow-sm">
                         <div className="card-header d-flex justify-content-between align-items-center">
-                            <h2 className="mb-0">{author.name}</h2>
+                            <h2 className="mb-0">{author.fullName}</h2>
                             <div className="btn-group">
                                 <Link 
                                     to={`/authors/edit/${author.id}`} 
@@ -86,8 +86,8 @@ const AuthorDetail: React.FC = () => {
                                 >
                                     <i className="fas fa-edit me-1"></i>Edit
                                 </Link>
-                                <button
-                                    onClick={handleDelete}
+                                <button 
+                                    onClick={handleDelete} 
                                     className="btn btn-outline-danger btn-sm"
                                 >
                                     <i className="fas fa-trash me-1"></i>Delete
@@ -95,58 +95,58 @@ const AuthorDetail: React.FC = () => {
                             </div>
                         </div>
                         <div className="card-body">
-                            <div className="mb-4">
-                                <h5><i className="fas fa-calendar me-2 text-muted"></i>Birth Date</h5>
-                                <p className="text-muted">{new Date(author.birthDate).toLocaleDateString()}</p>
-                            </div>
-                            
-                            <div className="mb-4">
-                                <h5><i className="fas fa-user me-2 text-muted"></i>Biography</h5>
-                                <p className="text-muted" style={{ lineHeight: '1.6' }}>
-                                    {author.biography}
+                            {author.birthDate && (
+                                <p className="text-muted mb-3">
+                                    <i className="fas fa-calendar me-2"></i>
+                                    <strong>Born:</strong> {new Date(author.birthDate).toLocaleDateString()}
                                 </p>
-                            </div>
+                            )}
+                            
+                            {author.biography && (
+                                <div>
+                                    <h5>Biography</h5>
+                                    <p className="text-muted">{author.biography}</p>
+                                </div>
+                            )}
                         </div>
                     </div>
 
+                    {/* Author's Books */}
                     <div className="card shadow-sm mt-4">
-                        <div className="card-header d-flex justify-content-between align-items-center">
+                        <div className="card-header">
                             <h4 className="mb-0">
-                                <i className="fas fa-books me-2"></i>
-                                Books by {author.name} ({books.length})
+                                <i className="fas fa-book me-2"></i>
+                                Books by {author.fullName} ({books.length})
                             </h4>
-                            <Link 
-                                to="/books/create" 
-                                className="btn btn-outline-primary btn-sm"
-                            >
-                                <i className="fas fa-plus me-1"></i>Add Book
-                            </Link>
                         </div>
                         <div className="card-body">
-                            {books.length > 0 ? (
+                            {books.length === 0 ? (
+                                <p className="text-muted text-center py-3">
+                                    No books found for this author.
+                                </p>
+                            ) : (
                                 <div className="row">
                                     {books.map((book) => (
                                         <div key={book.id} className="col-md-6 mb-3">
-                                            <div className="card h-100 border-0 bg-light">
+                                            <div className="card h-100">
                                                 <div className="card-body">
                                                     <h6 className="card-title">{book.title}</h6>
-                                                    <p className="card-text small text-muted mb-2">
-                                                        <i className="fas fa-tag me-1"></i>
-                                                        {book.category?.name || 'Uncategorized'}
+                                                    <p className="card-text small text-muted">
+                                                        Published: {new Date(book.publishedDate).toLocaleDateString()}
                                                     </p>
-                                                    <p className="card-text small text-muted mb-2">
-                                                        <i className="fas fa-calendar me-1"></i>
-                                                        Published: {new Date(book.publicationDate).getFullYear()}
-                                                    </p>
-                                                    <p className="card-text small">
-                                                        {book.description && book.description.length > 100 
-                                                            ? `${book.description.substring(0, 100)}...` 
-                                                            : book.description || 'No description available'
-                                                        }
-                                                    </p>
+                                                    {book.description && (
+                                                        <p className="card-text small">
+                                                            {book.description.length > 100 
+                                                                ? `${book.description.substring(0, 100)}...`
+                                                                : book.description
+                                                            }
+                                                        </p>
+                                                    )}
+                                                </div>
+                                                <div className="card-footer bg-transparent">
                                                     <Link 
                                                         to={`/books/${book.id}`} 
-                                                        className="btn btn-sm btn-primary mt-2"
+                                                        className="btn btn-sm btn-outline-primary w-100"
                                                     >
                                                         View Details
                                                     </Link>
@@ -155,19 +155,12 @@ const AuthorDetail: React.FC = () => {
                                         </div>
                                     ))}
                                 </div>
-                            ) : (
-                                <div className="text-center py-4">
-                                    <i className="fas fa-book text-muted mb-3" style={{ fontSize: '2rem' }}></i>
-                                    <p className="text-muted">No books found for this author.</p>
-                                    <Link to="/books/create" className="btn btn-primary">
-                                        Add First Book
-                                    </Link>
-                                </div>
                             )}
                         </div>
                     </div>
                 </div>
 
+                {/* Sidebar */}
                 <div className="col-lg-4">
                     <div className="card shadow-sm">
                         <div className="card-header">
@@ -175,40 +168,24 @@ const AuthorDetail: React.FC = () => {
                         </div>
                         <div className="card-body">
                             <div className="d-grid gap-2">
-                                <Link to="/authors" className="btn btn-outline-secondary">
-                                    <i className="fas fa-arrow-left me-2"></i>Back to Authors
+                                <Link 
+                                    to="/authors" 
+                                    className="btn btn-outline-secondary"
+                                >
+                                    <i className="fas fa-arrow-left me-1"></i>Back to Authors
                                 </Link>
                                 <Link 
                                     to={`/authors/edit/${author.id}`} 
                                     className="btn btn-primary"
                                 >
-                                    <i className="fas fa-edit me-2"></i>Edit Author
+                                    <i className="fas fa-edit me-1"></i>Edit Author
                                 </Link>
-                                <Link to="/books/create" className="btn btn-success">
-                                    <i className="fas fa-plus me-2"></i>Add New Book
+                                <Link 
+                                    to="/books/create" 
+                                    className="btn btn-success"
+                                >
+                                    <i className="fas fa-plus me-1"></i>Add New Book
                                 </Link>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="card shadow-sm mt-3">
-                        <div className="card-header">
-                            <h5 className="mb-0">Statistics</h5>
-                        </div>
-                        <div className="card-body">
-                            <div className="row text-center">
-                                <div className="col-6">
-                                    <div className="border-end">
-                                        <h4 className="text-primary mb-0">{books.length}</h4>
-                                        <small className="text-muted">Books</small>
-                                    </div>
-                                </div>
-                                <div className="col-6">
-                                    <h4 className="text-success mb-0">
-                                        {new Date().getFullYear() - new Date(author.birthDate).getFullYear()}
-                                    </h4>
-                                    <small className="text-muted">Years Old</small>
-                                </div>
                             </div>
                         </div>
                     </div>

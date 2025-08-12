@@ -38,7 +38,7 @@ const CategoryList: React.FC = () => {
 
     const filteredCategories = categories.filter(category =>
         category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        category.description.toLowerCase().includes(searchTerm.toLowerCase())
+        (category.description && category.description.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     if (loading) {
@@ -99,9 +99,9 @@ const CategoryList: React.FC = () => {
                                         {category.name}
                                     </h5>
                                     <p className="card-text text-muted">
-                                        {category.description.length > 120 
+                                        {category.description && category.description.length > 120 
                                             ? `${category.description.substring(0, 120)}...` 
-                                            : category.description
+                                            : category.description || 'No description available'
                                         }
                                     </p>
                                 </div>

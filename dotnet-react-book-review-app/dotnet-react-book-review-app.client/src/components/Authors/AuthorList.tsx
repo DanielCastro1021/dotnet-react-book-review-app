@@ -24,8 +24,8 @@ const AuthorList: React.FC = () => {
         }
     };
 
-    const handleDelete = async (id: number, name: string) => {
-        if (window.confirm(`Are you sure you want to delete "${name}"?`)) {
+    const handleDelete = async (id: number, fullName: string) => {
+        if (window.confirm(`Are you sure you want to delete "${fullName}"?`)) {
             try {
                 await authorService.delete(id);
                 setAuthors(authors.filter(author => author.id !== id));
@@ -37,8 +37,8 @@ const AuthorList: React.FC = () => {
     };
 
     const filteredAuthors = authors.filter(author =>
-        author.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        author.biography.toLowerCase().includes(searchTerm.toLowerCase())
+        author.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (author.biography && author.biography.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     if (loading) {
@@ -94,17 +94,19 @@ const AuthorList: React.FC = () => {
                         <div key={author.id} className="col-md-6 col-lg-4 mb-4">
                             <div className="card h-100 shadow-sm">
                                 <div className="card-body">
-                                    <h5 className="card-title">{author.name}</h5>
+                                    <h5 className="card-title">{author.fullName}</h5>
                                     <p className="card-text text-muted small">
-                                        {author.biography.length > 150 
+                                        {author.biography && author.biography.length > 150 
                                             ? `${author.biography.substring(0, 150)}...` 
-                                            : author.biography
+                                            : author.biography || 'No biography available'
                                         }
                                     </p>
-                                    <p className="text-muted small mb-3">
-                                        <i className="fas fa-calendar me-1"></i>
-                                        Born: {new Date(author.birthDate).toLocaleDateString()}
-                                    </p>
+                                    {author.birthDate && (
+                                        <p className="text-muted small mb-3">
+                                            <i className="fas fa-calendar me-1"></i>
+                                            Born: {new Date(author.birthDate).toLocaleDateString()}
+                                        </p>
+                                    )}
                                 </div>
                                 <div className="card-footer bg-transparent">
                                     <div className="btn-group w-100" role="group">
@@ -121,7 +123,7 @@ const AuthorList: React.FC = () => {
                                             Edit
                                         </Link>
                                         <button
-                                            onClick={() => handleDelete(author.id, author.name)}
+                                            onClick={() => handleDelete(author.id, author.fullName)}
                                             className="btn btn-outline-danger btn-sm"
                                         >
                                             Delete

@@ -108,7 +108,7 @@ const BookDetail: React.FC = () => {
                                     <h6><i className="fas fa-user me-2 text-muted"></i>Author</h6>
                                     <p className="text-muted">
                                         <Link to={`/authors/${book.author?.id}`} className="text-decoration-none">
-                                            {book.author?.name || 'Unknown Author'}
+                                            {book.author?.fullName || 'Unknown Author'}
                                         </Link>
                                     </p>
                                 </div>
@@ -125,11 +125,11 @@ const BookDetail: React.FC = () => {
                             <div className="row mb-4">
                                 <div className="col-md-6">
                                     <h6><i className="fas fa-barcode me-2 text-muted"></i>ISBN</h6>
-                                    <p className="text-muted">{book.isbn}</p>
+                                    <p className="text-muted">{book.isbn || 'N/A'}</p>
                                 </div>
                                 <div className="col-md-6">
                                     <h6><i className="fas fa-calendar me-2 text-muted"></i>Publication Date</h6>
-                                    <p className="text-muted">{new Date(book.publicationDate).toLocaleDateString()}</p>
+                                    <p className="text-muted">{new Date(book.publishedDate).toLocaleDateString()}</p>
                                 </div>
                             </div>
 
@@ -178,17 +178,17 @@ const BookDetail: React.FC = () => {
                                                 <div className="card-body">
                                                     <div className="d-flex justify-content-between align-items-start mb-2">
                                                         <div>
-                                                            <h6 className="card-title mb-1">{review.reviewerName}</h6>
+                                                            <h6 className="card-title mb-1">{review.user?.userName || 'Anonymous User'}</h6>
                                                             <div className="mb-2">
                                                                 {renderStars(review.rating)}
                                                                 <span className="text-muted ms-2">({review.rating}/5)</span>
                                                             </div>
                                                         </div>
                                                         <small className="text-muted">
-                                                            {new Date(review.reviewDate).toLocaleDateString()}
+                                                            {new Date(review.createdDate).toLocaleDateString()}
                                                         </small>
                                                     </div>
-                                                    <p className="card-text">{review.comment}</p>
+                                                    <p className="card-text">{review.content}</p>
                                                     <div className="btn-group btn-group-sm">
                                                         <Link 
                                                             to={`/reviews/edit/${review.id}`}

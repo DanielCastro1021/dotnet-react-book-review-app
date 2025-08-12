@@ -24,8 +24,8 @@ const ReviewList: React.FC = () => {
         }
     };
 
-    const handleDelete = async (id: number, reviewerName: string) => {
-        if (window.confirm(`Are you sure you want to delete the review by "${reviewerName}"?`)) {
+    const handleDelete = async (id: number, userName: string) => {
+        if (window.confirm(`Are you sure you want to delete the review by "${userName}"?`)) {
             try {
                 await reviewService.delete(id);
                 setReviews(reviews.filter(review => review.id !== id));
@@ -43,9 +43,9 @@ const ReviewList: React.FC = () => {
     };
 
     const filteredReviews = reviews.filter(review =>
-        review.reviewerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        review.comment.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        review.book?.title.toLowerCase().includes(searchTerm.toLowerCase())
+        (review.user?.userName?.toLowerCase().includes(searchTerm.toLowerCase()) || false) ||
+        review.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (review.book?.title?.toLowerCase().includes(searchTerm.toLowerCase()) || false)
     );
 
     if (loading) {
@@ -102,9 +102,9 @@ const ReviewList: React.FC = () => {
                             <div className="card h-100 shadow-sm">
                                 <div className="card-body">
                                     <div className="d-flex justify-content-between align-items-start mb-2">
-                                        <h5 className="card-title mb-0">{review.reviewerName}</h5>
+                                        <h5 className="card-title mb-0">{review.user?.userName}</h5>
                                         <small className="text-muted">
-                                            {new Date(review.reviewDate).toLocaleDateString()}
+                                            {new Date(review.createdDate).toLocaleDateString()}
                                         </small>
                                     </div>
                                     
@@ -124,9 +124,9 @@ const ReviewList: React.FC = () => {
                                     </p>
                                     
                                     <p className="card-text text-muted small">
-                                        {review.comment.length > 120 
-                                            ? `${review.comment.substring(0, 120)}...` 
-                                            : review.comment
+                                        {review.content.length > 120 
+                                            ? `${review.content.substring(0, 120)}...` 
+                                            : review.content
                                         }
                                     </p>
                                 </div>
@@ -145,7 +145,7 @@ const ReviewList: React.FC = () => {
                                             Edit
                                         </Link>
                                         <button
-                                            onClick={() => handleDelete(review.id, review.reviewerName)}
+                                            onClick={() => handleDelete(review.id, review.user?.userName || '')}
                                             className="btn btn-outline-danger btn-sm"
                                         >
                                             Delete

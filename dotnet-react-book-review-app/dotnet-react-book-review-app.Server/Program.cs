@@ -77,6 +77,7 @@ if (app.Environment.IsDevelopment())
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
+        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
         var logger = services.GetRequiredService<ILogger<Program>>();
 
         logger.LogInformation("Applying database migrations...");
@@ -87,7 +88,7 @@ if (app.Environment.IsDevelopment())
         logger.LogInformation("Database migrations applied successfully.");
 
         // Optional: Seed initial data
-        await Utils.SeedDataAsync(context, logger);
+        await Utils.SeedDataAsync(context, userManager, logger);
     }
     catch (Exception ex)
     {

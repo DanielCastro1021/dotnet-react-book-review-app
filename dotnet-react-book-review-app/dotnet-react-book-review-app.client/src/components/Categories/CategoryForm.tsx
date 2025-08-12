@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { categoryService, Category } from "../../services/api";
+import { categoryService } from "../../services/api";
 
 interface CategoryFormParams {
     id?: string;
@@ -31,7 +31,7 @@ const CategoryForm: React.FC = () => {
             const category = response.data;
             setFormData({
                 name: category.name,
-                description: category.description
+                description: category.description ?? ''
             });
         } catch (error) {
             console.error('Error fetching category:', error);

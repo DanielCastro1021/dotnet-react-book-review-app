@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useHistory, useParams, useLocation } from "react-router-dom";
-import { reviewService, bookService, Review, Book } from "../../services/api";
+import React, {useState, useEffect} from "react";
+import {useHistory, useParams, useLocation} from "react-router-dom";
+import {reviewService, bookService, Review, Book} from "../../services/api";
 
 interface ReviewFormParams {
     id?: string;
@@ -9,7 +9,7 @@ interface ReviewFormParams {
 const ReviewForm: React.FC = () => {
     const history = useHistory();
     const location = useLocation();
-    const { id } = useParams<ReviewFormParams>();
+    const {id} = useParams<ReviewFormParams>();
     const isEditing = Boolean(id);
 
     // Get bookId from URL query params
@@ -18,14 +18,14 @@ const ReviewForm: React.FC = () => {
 
     const [formData, setFormData] = useState({
         bookId: preselectedBookId || '',
-        reviewerName: '',
+        userId: '', // This would typically come from authentication context
         rating: 1,
-        comment: ''
+        content: ''
     });
     const [books, setBooks] = useState<Book[]>([]);
     const [loading, setLoading] = useState(false);
     const [initialLoading, setInitialLoading] = useState(true);
-    const [errors, setErrors] = useState<{[key: string]: string}>({});
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     useEffect(() => {
         fetchBooks();
@@ -57,9 +57,9 @@ const ReviewForm: React.FC = () => {
             const review = response.data;
             setFormData({
                 bookId: review.bookId.toString(),
-                reviewerName: review.reviewerName,
+                userId: review.userId,
                 rating: review.rating,
-                comment: review.comment
+                content: review.content
             });
         } catch (error) {
             console.error('Error fetching review:', error);
@@ -71,7 +71,7 @@ const ReviewForm: React.FC = () => {
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value, type } = e.target;
+        const {name, value, type} = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: type === 'number' ? parseInt(value) : value
@@ -85,22 +85,18 @@ const ReviewForm: React.FC = () => {
     };
 
     const validateForm = () => {
-        const newErrors: {[key: string]: string} = {};
+        const newErrors: { [key: string]: string } = {};
 
         if (!formData.bookId) {
             newErrors.bookId = 'Book is required';
-        }
-
-        if (!formData.reviewerName.trim()) {
-            newErrors.reviewerName = 'Reviewer name is required';
         }
 
         if (formData.rating < 1 || formData.rating > 5) {
             newErrors.rating = 'Rating must be between 1 and 5';
         }
 
-        if (!formData.comment.trim()) {
-            newErrors.comment = 'Comment is required';
+        if (!formData.content.trim()) {
+            newErrors.content = 'Review content is required';
         }
 
         setErrors(newErrors);
@@ -109,26 +105,29 @@ const ReviewForm: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (!validateForm()) {
             return;
         }
 
         try {
             setLoading(true);
-            
-            const reviewData = {
-                ...formData,
+
+            const reviewData: Review = {
                 bookId: parseInt(formData.bookId),
-                reviewDate: new Date().toISOString()
+                userId: formData.userId || "temp-user-id", // TODO: Get from authentication context
+                rating: formData.rating,
+                content: formData.content,
+                id: 0,
+                createdDate: ""
             };
-            
+
             if (isEditing && id) {
                 await reviewService.update(parseInt(id), reviewData);
             } else {
                 await reviewService.create(reviewData);
             }
-            
+
             history.push('/reviews');
         } catch (error) {
             console.error('Error saving review:', error);
@@ -139,12 +138,12 @@ const ReviewForm: React.FC = () => {
     };
 
     const renderStars = (rating: number) => {
-        return Array.from({ length: 5 }, (_, i) => (
-            <span 
-                key={i} 
+        return Array.from({length: 5}, (_, i) => (
+            <span
+                key={i}
                 className={`text-${i < rating ? 'warning' : 'muted'} fs-4 me-1`}
-                style={{ cursor: 'pointer' }}
-                onClick={() => setFormData(prev => ({ ...prev, rating: i + 1 }))}
+                style={{cursor: 'pointer'}}
+                onClick={() => setFormData(prev => ({...prev, rating: i + 1}))}
             >
                 ★
             </span>
@@ -189,27 +188,11 @@ const ReviewForm: React.FC = () => {
                                         <option value="">Select a book</option>
                                         {books.map(book => (
                                             <option key={book.id} value={book.id}>
-                                                {book.title} - {book.author?.name}
+                                                {book.title} - {book.author?.fullName || 'Unknown Author'}
                                             </option>
                                         ))}
                                     </select>
                                     {errors.bookId && <div className="invalid-feedback">{errors.bookId}</div>}
-                                </div>
-
-                                <div className="mb-3">
-                                    <label htmlFor="reviewerName" className="form-label">
-                                        Your Name <span className="text-danger">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className={`form-control ${errors.reviewerName ? 'is-invalid' : ''}`}
-                                        id="reviewerName"
-                                        name="reviewerName"
-                                        value={formData.reviewerName}
-                                        onChange={handleChange}
-                                        placeholder="Enter your name"
-                                    />
-                                    {errors.reviewerName && <div className="invalid-feedback">{errors.reviewerName}</div>}
                                 </div>
 
                                 <div className="mb-3">
@@ -233,30 +216,34 @@ const ReviewForm: React.FC = () => {
                                 </div>
 
                                 <div className="mb-3">
-                                    <label htmlFor="comment" className="form-label">
-                                        Review Comment <span className="text-danger">*</span>
+                                    <label htmlFor="content" className="form-label">
+                                        Review Content <span className="text-danger">*</span>
                                     </label>
                                     <textarea
-                                        className={`form-control ${errors.comment ? 'is-invalid' : ''}`}
-                                        id="comment"
-                                        name="comment"
+                                        className={`form-control ${errors.content ? 'is-invalid' : ''}`}
+                                        id="content"
+                                        name="content"
                                         rows={5}
-                                        value={formData.comment}
+                                        value={formData.content}
                                         onChange={handleChange}
                                         placeholder="Write your review..."
                                     />
-                                    {errors.comment && <div className="invalid-feedback">{errors.comment}</div>}
+                                    {errors.content && <div className="invalid-feedback">{errors.content}</div>}
+                                    <div className="form-text">
+                                        Share your thoughts about this book. What did you like or dislike?
+                                    </div>
                                 </div>
 
                                 <div className="d-flex gap-2">
-                                    <button 
-                                        type="submit" 
+                                    <button
+                                        type="submit"
                                         className="btn btn-primary flex-fill"
                                         disabled={loading}
                                     >
                                         {loading ? (
                                             <>
-                                                <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                                <span className="spinner-border spinner-border-sm me-2"
+                                                      role="status"></span>
                                                 Saving...
                                             </>
                                         ) : (
@@ -266,8 +253,8 @@ const ReviewForm: React.FC = () => {
                                             </>
                                         )}
                                     </button>
-                                    <button 
-                                        type="button" 
+                                    <button
+                                        type="button"
                                         className="btn btn-secondary"
                                         onClick={() => history.push('/reviews')}
                                         disabled={loading}

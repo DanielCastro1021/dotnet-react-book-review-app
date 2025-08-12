@@ -35,7 +35,7 @@ const ReviewDetail: React.FC = () => {
     const handleDelete = async () => {
         if (!review) return;
         
-        if (window.confirm(`Are you sure you want to delete this review by "${review.reviewerName}"?`)) {
+        if (window.confirm(`Are you sure you want to delete this review by "${review.user?.userName || 'Anonymous User'}"?`)) {
             try {
                 await reviewService.delete(review.id);
                 history.push('/reviews');
@@ -76,7 +76,7 @@ const ReviewDetail: React.FC = () => {
                 <div className="col-lg-8">
                     <div className="card shadow-sm">
                         <div className="card-header d-flex justify-content-between align-items-center">
-                            <h2 className="mb-0">Review by {review.reviewerName}</h2>
+                            <h2 className="mb-0">Review by {review.user?.userName || 'Anonymous User'}</h2>
                             <div className="btn-group">
                                 <Link 
                                     to={`/reviews/edit/${review.id}`} 
@@ -84,8 +84,8 @@ const ReviewDetail: React.FC = () => {
                                 >
                                     <i className="fas fa-edit me-1"></i>Edit
                                 </Link>
-                                <button
-                                    onClick={handleDelete}
+                                <button 
+                                    onClick={handleDelete} 
                                     className="btn btn-outline-danger btn-sm"
                                 >
                                     <i className="fas fa-trash me-1"></i>Delete
@@ -97,42 +97,36 @@ const ReviewDetail: React.FC = () => {
                                 <div className="col-md-6">
                                     <h6><i className="fas fa-book me-2 text-muted"></i>Book</h6>
                                     <p className="text-muted">
-                                        <Link 
-                                            to={`/books/${review.book?.id}`}
-                                            className="text-decoration-none"
-                                        >
+                                        <Link to={`/books/${review.book?.id}`} className="text-decoration-none">
                                             {review.book?.title || 'Unknown Book'}
                                         </Link>
                                     </p>
                                 </div>
                                 <div className="col-md-6">
                                     <h6><i className="fas fa-calendar me-2 text-muted"></i>Review Date</h6>
-                                    <p className="text-muted">{new Date(review.reviewDate).toLocaleDateString()}</p>
+                                    <p className="text-muted">{new Date(review.createdDate).toLocaleDateString()}</p>
                                 </div>
                             </div>
 
                             <div className="mb-4">
                                 <h6><i className="fas fa-star me-2 text-muted"></i>Rating</h6>
-                                <div className="d-flex align-items-center">
-                                    <div className="me-3">
-                                        {renderStars(review.rating)}
-                                    </div>
-                                    <span className="text-muted">
-                                        {review.rating} out of 5 stars
-                                    </span>
+                                <div className="d-flex align-items-center mb-3">
+                                    {renderStars(review.rating)}
+                                    <span className="ms-3 text-muted">({review.rating}/5)</span>
                                 </div>
                             </div>
 
                             <div className="mb-4">
-                                <h6><i className="fas fa-comment me-2 text-muted"></i>Review Comment</h6>
-                                <div className="bg-light p-3 rounded" style={{ lineHeight: '1.6' }}>
-                                    <p className="mb-0">{review.comment}</p>
-                                </div>
+                                <h6><i className="fas fa-comment me-2 text-muted"></i>Review Content</h6>
+                                <p className="text-muted" style={{ lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>
+                                    {review.content}
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                {/* Sidebar */}
                 <div className="col-lg-4">
                     <div className="card shadow-sm">
                         <div className="card-header">
@@ -149,41 +143,32 @@ const ReviewDetail: React.FC = () => {
                                 >
                                     <i className="fas fa-edit me-2"></i>Edit Review
                                 </Link>
-                                {review.book?.id && (
-                                    <Link 
-                                        to={`/books/${review.book.id}`}
-                                        className="btn btn-success"
-                                    >
-                                        <i className="fas fa-book me-2"></i>View Book
-                                    </Link>
-                                )}
+                                <Link 
+                                    to={`/books/${review.book?.id}`}
+                                    className="btn btn-success"
+                                >
+                                    <i className="fas fa-book me-2"></i>View Book
+                                </Link>
                             </div>
                         </div>
                     </div>
 
                     <div className="card shadow-sm mt-3">
                         <div className="card-header">
-                            <h5 className="mb-0">Review Summary</h5>
+                            <h5 className="mb-0">Review Details</h5>
                         </div>
                         <div className="card-body">
-                            <div className="text-center">
-                                <div className="mb-3">
-                                    {renderStars(review.rating)}
+                            <div className="row text-center">
+                                <div className="col-12 mb-3">
+                                    <div className="border-bottom pb-2 mb-2">
+                                        <h4 className="text-warning mb-0">{review.rating}/5</h4>
+                                        <small className="text-muted">Rating</small>
+                                    </div>
                                 </div>
-                                <h4 className="text-warning mb-1">{review.rating}/5</h4>
-                                <p className="text-muted small mb-0">Rating</p>
-                            </div>
-                            <hr />
-                            <div className="small text-muted">
-                                <p className="mb-1">
-                                    <strong>Reviewer:</strong> {review.reviewerName}
-                                </p>
-                                <p className="mb-1">
-                                    <strong>Date:</strong> {new Date(review.reviewDate).toLocaleDateString()}
-                                </p>
-                                <p className="mb-0">
-                                    <strong>Words:</strong> {review.comment.split(' ').length}
-                                </p>
+                                <div className="col-12">
+                                    <h6 className="text-primary mb-0">{review.user?.userName || 'Anonymous'}</h6>
+                                    <small className="text-muted">Reviewer</small>
+                                </div>
                             </div>
                         </div>
                     </div>

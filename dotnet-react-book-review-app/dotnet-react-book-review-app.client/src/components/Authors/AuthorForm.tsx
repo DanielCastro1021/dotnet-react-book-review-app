@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import { authorService, Author } from "../../services/api";
+import React, {useState, useEffect} from "react";
+import {useHistory, useParams} from "react-router-dom";
+import {authorService, Author} from "../../services/api";
 
 interface AuthorFormParams {
     id?: string;
@@ -8,16 +8,17 @@ interface AuthorFormParams {
 
 const AuthorForm: React.FC = () => {
     const history = useHistory();
-    const { id } = useParams<AuthorFormParams>();
+    const {id} = useParams<AuthorFormParams>();
     const isEditing = Boolean(id);
 
     const [formData, setFormData] = useState({
-        name: '',
+        firstName: '',
+        lastName: '',
         biography: '',
         birthDate: ''
     });
     const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState<{[key: string]: string}>({});
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     useEffect(() => {
         if (isEditing && id) {
@@ -31,9 +32,10 @@ const AuthorForm: React.FC = () => {
             const response = await authorService.getById(authorId);
             const author = response.data;
             setFormData({
-                name: author.name,
-                biography: author.biography,
-                birthDate: author.birthDate.split('T')[0] // Convert to YYYY-MM-DD format
+                firstName: author.firstName,
+                lastName: author.lastName,
+                biography: author.biography || '',
+                birthDate: author.birthDate ? author.birthDate.split('T')[0] : '' // Convert to YYYY-MM-DD format
             });
         } catch (error) {
             console.error('Error fetching author:', error);
@@ -45,7 +47,7 @@ const AuthorForm: React.FC = () => {
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: value
@@ -60,18 +62,14 @@ const AuthorForm: React.FC = () => {
     };
 
     const validateForm = () => {
-        const newErrors: {[key: string]: string} = {};
+        const newErrors: { [key: string]: string } = {};
 
-        if (!formData.name.trim()) {
-            newErrors.name = 'Name is required';
+        if (!formData.firstName.trim()) {
+            newErrors.firstName = 'First name is required';
         }
 
-        if (!formData.biography.trim()) {
-            newErrors.biography = 'Biography is required';
-        }
-
-        if (!formData.birthDate) {
-            newErrors.birthDate = 'Birth date is required';
+        if (!formData.lastName.trim()) {
+            newErrors.lastName = 'Last name is required';
         }
 
         setErrors(newErrors);
@@ -80,20 +78,29 @@ const AuthorForm: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (!validateForm()) {
             return;
         }
 
         try {
             setLoading(true);
-            
+
+            const submitData: Author = {
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                biography: formData.biography || undefined,
+                birthDate: formData.birthDate || undefined,
+                id: 0,
+                fullName: ""
+            };
+
             if (isEditing && id) {
-                await authorService.update(parseInt(id), formData);
+                await authorService.update(parseInt(id), submitData);
             } else {
-                await authorService.create(formData);
+                await authorService.create(submitData);
             }
-            
+
             history.push('/authors');
         } catch (error) {
             console.error('Error saving author:', error);
@@ -126,25 +133,42 @@ const AuthorForm: React.FC = () => {
                         </div>
                         <div className="card-body">
                             <form onSubmit={handleSubmit}>
-                                <div className="mb-3">
-                                    <label htmlFor="name" className="form-label">
-                                        Name <span className="text-danger">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className={`form-control ${errors.name ? 'is-invalid' : ''}`}
-                                        id="name"
-                                        name="name"
-                                        value={formData.name}
-                                        onChange={handleChange}
-                                        placeholder="Enter author's full name"
-                                    />
-                                    {errors.name && <div className="invalid-feedback">{errors.name}</div>}
+                                <div className="row">
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="firstName" className="form-label">
+                                            First Name <span className="text-danger">*</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            className={`form-control ${errors.firstName ? 'is-invalid' : ''}`}
+                                            id="firstName"
+                                            name="firstName"
+                                            value={formData.firstName}
+                                            onChange={handleChange}
+                                            placeholder="Enter first name"
+                                        />
+                                        {errors.firstName && <div className="invalid-feedback">{errors.firstName}</div>}
+                                    </div>
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="lastName" className="form-label">
+                                            Last Name <span className="text-danger">*</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            className={`form-control ${errors.lastName ? 'is-invalid' : ''}`}
+                                            id="lastName"
+                                            name="lastName"
+                                            value={formData.lastName}
+                                            onChange={handleChange}
+                                            placeholder="Enter last name"
+                                        />
+                                        {errors.lastName && <div className="invalid-feedback">{errors.lastName}</div>}
+                                    </div>
                                 </div>
 
                                 <div className="mb-3">
                                     <label htmlFor="birthDate" className="form-label">
-                                        Birth Date <span className="text-danger">*</span>
+                                        Birth Date
                                     </label>
                                     <input
                                         type="date"
@@ -159,7 +183,7 @@ const AuthorForm: React.FC = () => {
 
                                 <div className="mb-3">
                                     <label htmlFor="biography" className="form-label">
-                                        Biography <span className="text-danger">*</span>
+                                        Biography
                                     </label>
                                     <textarea
                                         className={`form-control ${errors.biography ? 'is-invalid' : ''}`}
@@ -174,14 +198,15 @@ const AuthorForm: React.FC = () => {
                                 </div>
 
                                 <div className="d-flex gap-2">
-                                    <button 
-                                        type="submit" 
+                                    <button
+                                        type="submit"
                                         className="btn btn-primary flex-fill"
                                         disabled={loading}
                                     >
                                         {loading ? (
                                             <>
-                                                <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                                <span className="spinner-border spinner-border-sm me-2"
+                                                      role="status"></span>
                                                 Saving...
                                             </>
                                         ) : (
@@ -191,8 +216,8 @@ const AuthorForm: React.FC = () => {
                                             </>
                                         )}
                                     </button>
-                                    <button 
-                                        type="button" 
+                                    <button
+                                        type="button"
                                         className="btn btn-secondary"
                                         onClick={() => history.push('/authors')}
                                         disabled={loading}
