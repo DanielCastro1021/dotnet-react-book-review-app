@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import { categoryService } from "../../services/api";
+import React, {useState, useEffect} from "react";
+import {useHistory, useParams} from "react-router-dom";
+import {categoryService} from "../../services/api";
 
 interface CategoryFormParams {
     id?: string;
@@ -8,7 +8,7 @@ interface CategoryFormParams {
 
 const CategoryForm: React.FC = () => {
     const history = useHistory();
-    const { id } = useParams<CategoryFormParams>();
+    const {id} = useParams<CategoryFormParams>();
     const isEditing = Boolean(id);
 
     const [formData, setFormData] = useState({
@@ -16,7 +16,7 @@ const CategoryForm: React.FC = () => {
         description: ''
     });
     const [loading, setLoading] = useState(false);
-    const [errors, setErrors] = useState<{[key: string]: string}>({});
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     useEffect(() => {
         if (isEditing && id) {
@@ -43,7 +43,7 @@ const CategoryForm: React.FC = () => {
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: value
@@ -57,7 +57,7 @@ const CategoryForm: React.FC = () => {
     };
 
     const validateForm = () => {
-        const newErrors: {[key: string]: string} = {};
+        const newErrors: { [key: string]: string } = {};
 
         if (!formData.name.trim()) {
             newErrors.name = 'Category name is required';
@@ -73,20 +73,20 @@ const CategoryForm: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (!validateForm()) {
             return;
         }
 
         try {
             setLoading(true);
-            
+
             if (isEditing && id) {
                 await categoryService.update(parseInt(id), formData);
             } else {
                 await categoryService.create(formData);
             }
-            
+
             history.push('/categories');
         } catch (error) {
             console.error('Error saving category:', error);
@@ -152,14 +152,15 @@ const CategoryForm: React.FC = () => {
                                 </div>
 
                                 <div className="d-flex gap-2">
-                                    <button 
-                                        type="submit" 
+                                    <button
+                                        type="submit"
                                         className="btn btn-primary flex-fill"
                                         disabled={loading}
                                     >
                                         {loading ? (
                                             <>
-                                                <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                                <span className="spinner-border spinner-border-sm me-2"
+                                                      role="status"></span>
                                                 Saving...
                                             </>
                                         ) : (
@@ -169,8 +170,8 @@ const CategoryForm: React.FC = () => {
                                             </>
                                         )}
                                     </button>
-                                    <button 
-                                        type="button" 
+                                    <button
+                                        type="button"
                                         className="btn btn-secondary"
                                         onClick={() => history.push('/categories')}
                                         disabled={loading}

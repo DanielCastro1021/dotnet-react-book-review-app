@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useHistory, useParams, Link } from "react-router-dom";
-import { authorService, bookService, Author, Book } from "../../services/api";
+import React, {useState, useEffect} from "react";
+import {useHistory, useParams, Link} from "react-router-dom";
+import {authorService, bookService, Author, Book} from "../../services/api";
 
 interface AuthorDetailParams {
     id: string;
@@ -8,7 +8,7 @@ interface AuthorDetailParams {
 
 const AuthorDetail: React.FC = () => {
     const history = useHistory();
-    const { id } = useParams<AuthorDetailParams>();
+    const {id} = useParams<AuthorDetailParams>();
     const [author, setAuthor] = useState<Author | null>(null);
     const [books, setBooks] = useState<Book[]>([]);
     const [loading, setLoading] = useState(true);
@@ -26,7 +26,7 @@ const AuthorDetail: React.FC = () => {
                 authorService.getById(authorId),
                 bookService.getAll()
             ]);
-            
+
             setAuthor(authorResponse.data);
             // Filter books by this author
             const authorBooks = booksResponse.data.filter(book => book.authorId === authorId);
@@ -42,7 +42,7 @@ const AuthorDetail: React.FC = () => {
 
     const handleDelete = async () => {
         if (!author) return;
-        
+
         if (window.confirm(`Are you sure you want to delete "${author.fullName}"?`)) {
             try {
                 await authorService.delete(author.id);
@@ -80,14 +80,14 @@ const AuthorDetail: React.FC = () => {
                         <div className="card-header d-flex justify-content-between align-items-center">
                             <h2 className="mb-0">{author.fullName}</h2>
                             <div className="btn-group">
-                                <Link 
-                                    to={`/authors/edit/${author.id}`} 
+                                <Link
+                                    to={`/authors/edit/${author.id}`}
                                     className="btn btn-outline-primary btn-sm"
                                 >
                                     <i className="fas fa-edit me-1"></i>Edit
                                 </Link>
-                                <button 
-                                    onClick={handleDelete} 
+                                <button
+                                    onClick={handleDelete}
                                     className="btn btn-outline-danger btn-sm"
                                 >
                                     <i className="fas fa-trash me-1"></i>Delete
@@ -101,7 +101,7 @@ const AuthorDetail: React.FC = () => {
                                     <strong>Born:</strong> {new Date(author.birthDate).toLocaleDateString()}
                                 </p>
                             )}
-                            
+
                             {author.biography && (
                                 <div>
                                     <h5>Biography</h5>
@@ -136,7 +136,7 @@ const AuthorDetail: React.FC = () => {
                                                     </p>
                                                     {book.description && (
                                                         <p className="card-text small">
-                                                            {book.description.length > 100 
+                                                            {book.description.length > 100
                                                                 ? `${book.description.substring(0, 100)}...`
                                                                 : book.description
                                                             }
@@ -144,8 +144,8 @@ const AuthorDetail: React.FC = () => {
                                                     )}
                                                 </div>
                                                 <div className="card-footer bg-transparent">
-                                                    <Link 
-                                                        to={`/books/${book.id}`} 
+                                                    <Link
+                                                        to={`/books/${book.id}`}
                                                         className="btn btn-sm btn-outline-primary w-100"
                                                     >
                                                         View Details
@@ -168,20 +168,20 @@ const AuthorDetail: React.FC = () => {
                         </div>
                         <div className="card-body">
                             <div className="d-grid gap-2">
-                                <Link 
-                                    to="/authors" 
+                                <Link
+                                    to="/authors"
                                     className="btn btn-outline-secondary"
                                 >
                                     <i className="fas fa-arrow-left me-1"></i>Back to Authors
                                 </Link>
-                                <Link 
-                                    to={`/authors/edit/${author.id}`} 
+                                <Link
+                                    to={`/authors/edit/${author.id}`}
                                     className="btn btn-primary"
                                 >
                                     <i className="fas fa-edit me-1"></i>Edit Author
                                 </Link>
-                                <Link 
-                                    to="/books/create" 
+                                <Link
+                                    to="/books/create"
                                     className="btn btn-success"
                                 >
                                     <i className="fas fa-plus me-1"></i>Add New Book

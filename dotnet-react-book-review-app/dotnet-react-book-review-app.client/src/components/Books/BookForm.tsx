@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import { bookService, authorService, categoryService, Author, Category } from "../../services/api";
+import React, {useState, useEffect} from "react";
+import {useHistory, useParams} from "react-router-dom";
+import {bookService, authorService, categoryService, Author, Category} from "../../services/api";
 
 interface BookFormParams {
     id?: string;
@@ -8,7 +8,7 @@ interface BookFormParams {
 
 const BookForm: React.FC = () => {
     const history = useHistory();
-    const { id } = useParams<BookFormParams>();
+    const {id} = useParams<BookFormParams>();
     const isEditing = Boolean(id);
 
     const [formData, setFormData] = useState({
@@ -23,7 +23,7 @@ const BookForm: React.FC = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(false);
     const [initialLoading, setInitialLoading] = useState(true);
-    const [errors, setErrors] = useState<{[key: string]: string}>({});
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
     useEffect(() => {
         fetchInitialData();
@@ -74,7 +74,7 @@ const BookForm: React.FC = () => {
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: value
@@ -88,7 +88,7 @@ const BookForm: React.FC = () => {
     };
 
     const validateForm = () => {
-        const newErrors: {[key: string]: string} = {};
+        const newErrors: { [key: string]: string } = {};
 
         if (!formData.title.trim()) {
             newErrors.title = 'Title is required';
@@ -120,26 +120,26 @@ const BookForm: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         if (!validateForm()) {
             return;
         }
 
         try {
             setLoading(true);
-            
+
             const bookData = {
                 ...formData,
                 authorId: parseInt(formData.authorId),
                 categoryId: parseInt(formData.categoryId)
             };
-            
+
             if (isEditing && id) {
                 await bookService.update(parseInt(id), bookData);
             } else {
                 await bookService.create(bookData);
             }
-            
+
             history.push('/books');
         } catch (error) {
             console.error('Error saving book:', error);
@@ -219,7 +219,8 @@ const BookForm: React.FC = () => {
                                                 value={formData.publishedDate}
                                                 onChange={handleChange}
                                             />
-                                            {errors.publishedDate && <div className="invalid-feedback">{errors.publishedDate}</div>}
+                                            {errors.publishedDate &&
+                                                <div className="invalid-feedback">{errors.publishedDate}</div>}
                                         </div>
                                     </div>
                                 </div>
@@ -243,7 +244,8 @@ const BookForm: React.FC = () => {
                                                     </option>
                                                 ))}
                                             </select>
-                                            {errors.authorId && <div className="invalid-feedback">{errors.authorId}</div>}
+                                            {errors.authorId &&
+                                                <div className="invalid-feedback">{errors.authorId}</div>}
                                         </div>
                                     </div>
                                     <div className="col-md-6">
@@ -265,7 +267,8 @@ const BookForm: React.FC = () => {
                                                     </option>
                                                 ))}
                                             </select>
-                                            {errors.categoryId && <div className="invalid-feedback">{errors.categoryId}</div>}
+                                            {errors.categoryId &&
+                                                <div className="invalid-feedback">{errors.categoryId}</div>}
                                         </div>
                                     </div>
                                 </div>
@@ -287,14 +290,15 @@ const BookForm: React.FC = () => {
                                 </div>
 
                                 <div className="d-flex gap-2">
-                                    <button 
-                                        type="submit" 
+                                    <button
+                                        type="submit"
                                         className="btn btn-primary flex-fill"
                                         disabled={loading}
                                     >
                                         {loading ? (
                                             <>
-                                                <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                                <span className="spinner-border spinner-border-sm me-2"
+                                                      role="status"></span>
                                                 Saving...
                                             </>
                                         ) : (
@@ -304,8 +308,8 @@ const BookForm: React.FC = () => {
                                             </>
                                         )}
                                     </button>
-                                    <button 
-                                        type="button" 
+                                    <button
+                                        type="button"
                                         className="btn btn-secondary"
                                         onClick={() => history.push('/books')}
                                         disabled={loading}

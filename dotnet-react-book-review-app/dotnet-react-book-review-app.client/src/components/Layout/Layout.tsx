@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import {Link} from "react-router-dom";
-import { authService, User } from "../../services/authService";
+import {authService, User} from "../../services/authService";
 
 interface LayoutProps {
     children: React.ReactNode;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({children}) => {
     const [user, setUser] = useState<User | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -14,20 +14,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         const checkAuthStatus = () => {
             const authenticated = authService.isAuthenticated();
             const currentUser = authService.getCurrentUser();
-            
+
             setIsAuthenticated(authenticated);
             setUser(currentUser);
         };
 
         checkAuthStatus();
-        
+
         // Check auth status on component mount and when storage changes
         const handleStorageChange = () => {
             checkAuthStatus();
         };
-        
+
         window.addEventListener('storage', handleStorageChange);
-        
+
         return () => {
             window.removeEventListener('storage', handleStorageChange);
         };
@@ -63,13 +63,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                     <Link className="nav-link text-dark" to="/reviews">Reviews</Link>
                                 </li>
                             </ul>
-                            
+
                             {/* Authentication Navigation */}
                             <ul className="navbar-nav">
                                 {isAuthenticated && user ? (
                                     <>
                                         <li className="nav-item dropdown">
-                                            <a className="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <a className="nav-link dropdown-toggle text-dark" href="#"
+                                               id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                                               aria-expanded="false">
                                                 <i className="fas fa-user me-1"></i>
                                                 Welcome, {user.firstName}
                                             </a>
@@ -80,7 +82,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                                         My Profile
                                                     </Link>
                                                 </li>
-                                                <li><hr className="dropdown-divider" /></li>
+                                                <li>
+                                                    <hr className="dropdown-divider"/>
+                                                </li>
                                                 <li>
                                                     <Link className="dropdown-item" to="/logout">
                                                         <i className="fas fa-sign-out-alt me-2"></i>

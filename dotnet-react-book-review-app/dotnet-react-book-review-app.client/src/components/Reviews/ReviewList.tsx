@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { reviewService, Review } from "../../services/api";
+import React, {useState, useEffect} from "react";
+import {Link} from "react-router-dom";
+import {reviewService, Review} from "../../services/api";
 
 const ReviewList: React.FC = () => {
     const [reviews, setReviews] = useState<Review[]>([]);
@@ -37,7 +37,7 @@ const ReviewList: React.FC = () => {
     };
 
     const renderStars = (rating: number) => {
-        return Array.from({ length: 5 }, (_, i) => (
+        return Array.from({length: 5}, (_, i) => (
             <span key={i} className={`text-${i < rating ? 'warning' : 'muted'}`}>★</span>
         ));
     };
@@ -86,7 +86,7 @@ const ReviewList: React.FC = () => {
 
             {filteredReviews.length === 0 ? (
                 <div className="text-center py-5">
-                    <i className="fas fa-comment text-muted mb-3" style={{ fontSize: '3rem' }}></i>
+                    <i className="fas fa-comment text-muted mb-3" style={{fontSize: '3rem'}}></i>
                     <h4 className="text-muted">No reviews found</h4>
                     <p className="text-muted">
                         {searchTerm ? 'Try adjusting your search criteria' : 'Start by adding your first review!'}
@@ -107,39 +107,39 @@ const ReviewList: React.FC = () => {
                                             {new Date(review.createdDate).toLocaleDateString()}
                                         </small>
                                     </div>
-                                    
+
                                     <div className="mb-2">
                                         {renderStars(review.rating)}
                                         <span className="text-muted ms-2">({review.rating}/5)</span>
                                     </div>
-                                    
+
                                     <p className="text-muted small mb-2">
                                         <i className="fas fa-book me-1"></i>
-                                        <Link 
+                                        <Link
                                             to={`/books/${review.book?.id}`}
                                             className="text-decoration-none"
                                         >
                                             {review.book?.title || 'Unknown Book'}
                                         </Link>
                                     </p>
-                                    
+
                                     <p className="card-text text-muted small">
-                                        {review.content.length > 120 
-                                            ? `${review.content.substring(0, 120)}...` 
+                                        {review.content.length > 120
+                                            ? `${review.content.substring(0, 120)}...`
                                             : review.content
                                         }
                                     </p>
                                 </div>
                                 <div className="card-footer bg-transparent">
                                     <div className="btn-group w-100" role="group">
-                                        <Link 
-                                            to={`/reviews/${review.id}`} 
+                                        <Link
+                                            to={`/reviews/${review.id}`}
                                             className="btn btn-outline-primary btn-sm"
                                         >
                                             View
                                         </Link>
-                                        <Link 
-                                            to={`/reviews/edit/${review.id}`} 
+                                        <Link
+                                            to={`/reviews/edit/${review.id}`}
                                             className="btn btn-outline-secondary btn-sm"
                                         >
                                             Edit

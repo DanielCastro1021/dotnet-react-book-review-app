@@ -69,7 +69,7 @@ export const authService = {
     isAuthenticated: (): boolean => {
         const token = localStorage.getItem('authToken');
         if (!token) return false;
-        
+
         try {
             const payload = JSON.parse(atob(token.split('.')[1]));
             const currentTime = Date.now() / 1000;
@@ -87,11 +87,11 @@ export const authService = {
             lastName: authResponse.lastName
         }));
     },
-    forgotPassword: (email: string) => authApi.post('/api/Account/forgot-password', { email }),
-    resetPassword: (token: string, newPassword: string) => 
-        authApi.post('/api/Account/reset-password', { token, newPassword }),
-    changePassword: (oldPassword: string, newPassword: string) => 
-        authApi.post('/api/Account/change-password', { oldPassword, newPassword }),
+    forgotPassword: (email: string) => authApi.post('/api/Account/forgot-password', {email}),
+    resetPassword: (token: string, newPassword: string) =>
+        authApi.post('/api/Account/reset-password', {token, newPassword}),
+    changePassword: (oldPassword: string, newPassword: string) =>
+        authApi.post('/api/Account/change-password', {oldPassword, newPassword}),
 };
 
 export default authApi;

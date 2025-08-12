@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useHistory, useParams, Link } from "react-router-dom";
-import { bookService, reviewService, Book, Review } from "../../services/api";
+import React, {useState, useEffect} from "react";
+import {useHistory, useParams, Link} from "react-router-dom";
+import {bookService, reviewService, Book, Review} from "../../services/api";
 
 interface BookDetailParams {
     id: string;
@@ -8,7 +8,7 @@ interface BookDetailParams {
 
 const BookDetail: React.FC = () => {
     const history = useHistory();
-    const { id } = useParams<BookDetailParams>();
+    const {id} = useParams<BookDetailParams>();
     const [book, setBook] = useState<Book | null>(null);
     const [reviews, setReviews] = useState<Review[]>([]);
     const [loading, setLoading] = useState(true);
@@ -24,9 +24,9 @@ const BookDetail: React.FC = () => {
             setLoading(true);
             const [bookResponse, reviewsResponse] = await Promise.all([
                 bookService.getById(bookId),
-                reviewService.getByBookId(bookId).catch(() => ({ data: [] }))
+                reviewService.getByBookId(bookId).catch(() => ({data: []}))
             ]);
-            
+
             setBook(bookResponse.data);
             setReviews(reviewsResponse.data);
         } catch (error) {
@@ -40,7 +40,7 @@ const BookDetail: React.FC = () => {
 
     const handleDelete = async () => {
         if (!book) return;
-        
+
         if (window.confirm(`Are you sure you want to delete "${book.title}"?`)) {
             try {
                 await bookService.delete(book.id);
@@ -53,13 +53,13 @@ const BookDetail: React.FC = () => {
     };
 
     const renderStars = (rating: number) => {
-        return Array.from({ length: 5 }, (_, i) => (
+        return Array.from({length: 5}, (_, i) => (
             <span key={i} className={`text-${i < rating ? 'warning' : 'muted'}`}>★</span>
         ));
     };
 
-    const averageRating = reviews.length > 0 
-        ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length 
+    const averageRating = reviews.length > 0
+        ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
         : 0;
 
     if (loading) {
@@ -88,8 +88,8 @@ const BookDetail: React.FC = () => {
                         <div className="card-header d-flex justify-content-between align-items-center">
                             <h2 className="mb-0">{book.title}</h2>
                             <div className="btn-group">
-                                <Link 
-                                    to={`/books/edit/${book.id}`} 
+                                <Link
+                                    to={`/books/edit/${book.id}`}
                                     className="btn btn-outline-primary btn-sm"
                                 >
                                     <i className="fas fa-edit me-1"></i>Edit
@@ -135,7 +135,7 @@ const BookDetail: React.FC = () => {
 
                             <div className="mb-4">
                                 <h6><i className="fas fa-info-circle me-2 text-muted"></i>Description</h6>
-                                <p className="text-muted" style={{ lineHeight: '1.6' }}>
+                                <p className="text-muted" style={{lineHeight: '1.6'}}>
                                     {book.description}
                                 </p>
                             </div>
@@ -162,7 +162,7 @@ const BookDetail: React.FC = () => {
                                 <i className="fas fa-comments me-2"></i>
                                 Reviews ({reviews.length})
                             </h4>
-                            <Link 
+                            <Link
                                 to={`/reviews/create?bookId=${book.id}`}
                                 className="btn btn-outline-primary btn-sm"
                             >
@@ -176,12 +176,14 @@ const BookDetail: React.FC = () => {
                                         <div key={review.id} className="col-12 mb-4">
                                             <div className="card border-0 bg-light">
                                                 <div className="card-body">
-                                                    <div className="d-flex justify-content-between align-items-start mb-2">
+                                                    <div
+                                                        className="d-flex justify-content-between align-items-start mb-2">
                                                         <div>
                                                             <h6 className="card-title mb-1">{review.user?.userName || 'Anonymous User'}</h6>
                                                             <div className="mb-2">
                                                                 {renderStars(review.rating)}
-                                                                <span className="text-muted ms-2">({review.rating}/5)</span>
+                                                                <span
+                                                                    className="text-muted ms-2">({review.rating}/5)</span>
                                                             </div>
                                                         </div>
                                                         <small className="text-muted">
@@ -190,13 +192,13 @@ const BookDetail: React.FC = () => {
                                                     </div>
                                                     <p className="card-text">{review.content}</p>
                                                     <div className="btn-group btn-group-sm">
-                                                        <Link 
+                                                        <Link
                                                             to={`/reviews/edit/${review.id}`}
                                                             className="btn btn-outline-secondary"
                                                         >
                                                             Edit
                                                         </Link>
-                                                        <Link 
+                                                        <Link
                                                             to={`/reviews/${review.id}`}
                                                             className="btn btn-outline-primary"
                                                         >
@@ -210,9 +212,9 @@ const BookDetail: React.FC = () => {
                                 </div>
                             ) : (
                                 <div className="text-center py-4">
-                                    <i className="fas fa-comment text-muted mb-3" style={{ fontSize: '2rem' }}></i>
+                                    <i className="fas fa-comment text-muted mb-3" style={{fontSize: '2rem'}}></i>
                                     <p className="text-muted">No reviews yet for this book.</p>
-                                    <Link 
+                                    <Link
                                         to={`/reviews/create?bookId=${book.id}`}
                                         className="btn btn-primary"
                                     >
@@ -234,13 +236,13 @@ const BookDetail: React.FC = () => {
                                 <Link to="/books" className="btn btn-outline-secondary">
                                     <i className="fas fa-arrow-left me-2"></i>Back to Books
                                 </Link>
-                                <Link 
-                                    to={`/books/edit/${book.id}`} 
+                                <Link
+                                    to={`/books/edit/${book.id}`}
                                     className="btn btn-primary"
                                 >
                                     <i className="fas fa-edit me-2"></i>Edit Book
                                 </Link>
-                                <Link 
+                                <Link
                                     to={`/reviews/create?bookId=${book.id}`}
                                     className="btn btn-success"
                                 >

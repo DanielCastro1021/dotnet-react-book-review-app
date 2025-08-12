@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useHistory, useParams, Link } from "react-router-dom";
-import { reviewService, Review } from "../../services/api";
+import React, {useState, useEffect} from "react";
+import {useHistory, useParams, Link} from "react-router-dom";
+import {reviewService, Review} from "../../services/api";
 
 interface ReviewDetailParams {
     id: string;
@@ -8,7 +8,7 @@ interface ReviewDetailParams {
 
 const ReviewDetail: React.FC = () => {
     const history = useHistory();
-    const { id } = useParams<ReviewDetailParams>();
+    const {id} = useParams<ReviewDetailParams>();
     const [review, setReview] = useState<Review | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -34,7 +34,7 @@ const ReviewDetail: React.FC = () => {
 
     const handleDelete = async () => {
         if (!review) return;
-        
+
         if (window.confirm(`Are you sure you want to delete this review by "${review.user?.userName || 'Anonymous User'}"?`)) {
             try {
                 await reviewService.delete(review.id);
@@ -47,7 +47,7 @@ const ReviewDetail: React.FC = () => {
     };
 
     const renderStars = (rating: number) => {
-        return Array.from({ length: 5 }, (_, i) => (
+        return Array.from({length: 5}, (_, i) => (
             <span key={i} className={`text-${i < rating ? 'warning' : 'muted'} fs-4`}>★</span>
         ));
     };
@@ -78,14 +78,14 @@ const ReviewDetail: React.FC = () => {
                         <div className="card-header d-flex justify-content-between align-items-center">
                             <h2 className="mb-0">Review by {review.user?.userName || 'Anonymous User'}</h2>
                             <div className="btn-group">
-                                <Link 
-                                    to={`/reviews/edit/${review.id}`} 
+                                <Link
+                                    to={`/reviews/edit/${review.id}`}
                                     className="btn btn-outline-primary btn-sm"
                                 >
                                     <i className="fas fa-edit me-1"></i>Edit
                                 </Link>
-                                <button 
-                                    onClick={handleDelete} 
+                                <button
+                                    onClick={handleDelete}
                                     className="btn btn-outline-danger btn-sm"
                                 >
                                     <i className="fas fa-trash me-1"></i>Delete
@@ -118,7 +118,7 @@ const ReviewDetail: React.FC = () => {
 
                             <div className="mb-4">
                                 <h6><i className="fas fa-comment me-2 text-muted"></i>Review Content</h6>
-                                <p className="text-muted" style={{ lineHeight: '1.6', whiteSpace: 'pre-wrap' }}>
+                                <p className="text-muted" style={{lineHeight: '1.6', whiteSpace: 'pre-wrap'}}>
                                     {review.content}
                                 </p>
                             </div>
@@ -137,13 +137,13 @@ const ReviewDetail: React.FC = () => {
                                 <Link to="/reviews" className="btn btn-outline-secondary">
                                     <i className="fas fa-arrow-left me-2"></i>Back to Reviews
                                 </Link>
-                                <Link 
-                                    to={`/reviews/edit/${review.id}`} 
+                                <Link
+                                    to={`/reviews/edit/${review.id}`}
                                     className="btn btn-primary"
                                 >
                                     <i className="fas fa-edit me-2"></i>Edit Review
                                 </Link>
-                                <Link 
+                                <Link
                                     to={`/books/${review.book?.id}`}
                                     className="btn btn-success"
                                 >

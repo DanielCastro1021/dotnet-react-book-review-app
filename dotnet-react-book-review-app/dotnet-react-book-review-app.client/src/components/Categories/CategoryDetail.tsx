@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useHistory, useParams, Link } from "react-router-dom";
-import { categoryService, bookService, Category, Book } from "../../services/api";
+import React, {useState, useEffect} from "react";
+import {useHistory, useParams, Link} from "react-router-dom";
+import {categoryService, bookService, Category, Book} from "../../services/api";
 
 interface CategoryDetailParams {
     id: string;
@@ -8,7 +8,7 @@ interface CategoryDetailParams {
 
 const CategoryDetail: React.FC = () => {
     const history = useHistory();
-    const { id } = useParams<CategoryDetailParams>();
+    const {id} = useParams<CategoryDetailParams>();
     const [category, setCategory] = useState<Category | null>(null);
     const [books, setBooks] = useState<Book[]>([]);
     const [loading, setLoading] = useState(true);
@@ -26,7 +26,7 @@ const CategoryDetail: React.FC = () => {
                 categoryService.getById(categoryId),
                 bookService.getAll()
             ]);
-            
+
             setCategory(categoryResponse.data);
             const categoryBooks = booksResponse.data.filter(book => book.categoryId === categoryId);
             setBooks(categoryBooks);
@@ -41,7 +41,7 @@ const CategoryDetail: React.FC = () => {
 
     const handleDelete = async () => {
         if (!category) return;
-        
+
         if (window.confirm(`Are you sure you want to delete "${category.name}"?`)) {
             try {
                 await categoryService.delete(category.id);
@@ -82,8 +82,8 @@ const CategoryDetail: React.FC = () => {
                                 {category.name}
                             </h2>
                             <div className="btn-group">
-                                <Link 
-                                    to={`/categories/edit/${category.id}`} 
+                                <Link
+                                    to={`/categories/edit/${category.id}`}
                                     className="btn btn-outline-primary btn-sm"
                                 >
                                     <i className="fas fa-edit me-1"></i>Edit
@@ -99,7 +99,7 @@ const CategoryDetail: React.FC = () => {
                         <div className="card-body">
                             <div className="mb-4">
                                 <h5><i className="fas fa-info-circle me-2 text-muted"></i>Description</h5>
-                                <p className="text-muted" style={{ lineHeight: '1.6' }}>
+                                <p className="text-muted" style={{lineHeight: '1.6'}}>
                                     {category.description}
                                 </p>
                             </div>
@@ -112,8 +112,8 @@ const CategoryDetail: React.FC = () => {
                                 <i className="fas fa-books me-2"></i>
                                 Books in {category.name} ({books.length})
                             </h4>
-                            <Link 
-                                to="/books/create" 
+                            <Link
+                                to="/books/create"
                                 className="btn btn-outline-primary btn-sm"
                             >
                                 <i className="fas fa-plus me-1"></i>Add Book
@@ -136,13 +136,13 @@ const CategoryDetail: React.FC = () => {
                                                         Published: {new Date(book.publishedDate).getFullYear()}
                                                     </p>
                                                     <p className="card-text small">
-                                                        {book.description && book.description.length > 100 
-                                                            ? `${book.description.substring(0, 100)}...` 
+                                                        {book.description && book.description.length > 100
+                                                            ? `${book.description.substring(0, 100)}...`
                                                             : book.description || 'No description available'
                                                         }
                                                     </p>
-                                                    <Link 
-                                                        to={`/books/${book.id}`} 
+                                                    <Link
+                                                        to={`/books/${book.id}`}
                                                         className="btn btn-sm btn-primary mt-2"
                                                     >
                                                         View Details
@@ -154,7 +154,7 @@ const CategoryDetail: React.FC = () => {
                                 </div>
                             ) : (
                                 <div className="text-center py-4">
-                                    <i className="fas fa-book text-muted mb-3" style={{ fontSize: '2rem' }}></i>
+                                    <i className="fas fa-book text-muted mb-3" style={{fontSize: '2rem'}}></i>
                                     <p className="text-muted">No books found in this category.</p>
                                     <Link to="/books/create" className="btn btn-primary">
                                         Add First Book
@@ -175,8 +175,8 @@ const CategoryDetail: React.FC = () => {
                                 <Link to="/categories" className="btn btn-outline-secondary">
                                     <i className="fas fa-arrow-left me-2"></i>Back to Categories
                                 </Link>
-                                <Link 
-                                    to={`/categories/edit/${category.id}`} 
+                                <Link
+                                    to={`/categories/edit/${category.id}`}
                                     className="btn btn-primary"
                                 >
                                     <i className="fas fa-edit me-2"></i>Edit Category

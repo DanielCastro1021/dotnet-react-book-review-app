@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { categoryService, Category } from "../../services/api";
+import React, {useState, useEffect} from "react";
+import {Link} from "react-router-dom";
+import {categoryService, Category} from "../../services/api";
 
 const CategoryList: React.FC = () => {
     const [categories, setCategories] = useState<Category[]>([]);
@@ -79,7 +79,7 @@ const CategoryList: React.FC = () => {
 
             {filteredCategories.length === 0 ? (
                 <div className="text-center py-5">
-                    <i className="fas fa-tags text-muted mb-3" style={{ fontSize: '3rem' }}></i>
+                    <i className="fas fa-tags text-muted mb-3" style={{fontSize: '3rem'}}></i>
                     <h4 className="text-muted">No categories found</h4>
                     <p className="text-muted">
                         {searchTerm ? 'Try adjusting your search criteria' : 'Start by adding your first category!'}
@@ -99,22 +99,22 @@ const CategoryList: React.FC = () => {
                                         {category.name}
                                     </h5>
                                     <p className="card-text text-muted">
-                                        {category.description && category.description.length > 120 
-                                            ? `${category.description.substring(0, 120)}...` 
+                                        {category.description && category.description.length > 120
+                                            ? `${category.description.substring(0, 120)}...`
                                             : category.description || 'No description available'
                                         }
                                     </p>
                                 </div>
                                 <div className="card-footer bg-transparent">
                                     <div className="btn-group w-100" role="group">
-                                        <Link 
-                                            to={`/categories/${category.id}`} 
+                                        <Link
+                                            to={`/categories/${category.id}`}
                                             className="btn btn-outline-primary btn-sm"
                                         >
                                             View
                                         </Link>
-                                        <Link 
-                                            to={`/categories/edit/${category.id}`} 
+                                        <Link
+                                            to={`/categories/edit/${category.id}`}
                                             className="btn btn-outline-secondary btn-sm"
                                         >
                                             Edit

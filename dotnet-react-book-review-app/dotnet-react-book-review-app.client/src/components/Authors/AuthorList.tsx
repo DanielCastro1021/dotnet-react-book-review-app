@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { authorService, Author } from "../../services/api";
+import React, {useState, useEffect} from "react";
+import {Link} from "react-router-dom";
+import {authorService, Author} from "../../services/api";
 
 const AuthorList: React.FC = () => {
     const [authors, setAuthors] = useState<Author[]>([]);
@@ -79,7 +79,7 @@ const AuthorList: React.FC = () => {
 
             {filteredAuthors.length === 0 ? (
                 <div className="text-center py-5">
-                    <i className="fas fa-user-edit text-muted mb-3" style={{ fontSize: '3rem' }}></i>
+                    <i className="fas fa-user-edit text-muted mb-3" style={{fontSize: '3rem'}}></i>
                     <h4 className="text-muted">No authors found</h4>
                     <p className="text-muted">
                         {searchTerm ? 'Try adjusting your search criteria' : 'Start by adding your first author!'}
@@ -96,8 +96,8 @@ const AuthorList: React.FC = () => {
                                 <div className="card-body">
                                     <h5 className="card-title">{author.fullName}</h5>
                                     <p className="card-text text-muted small">
-                                        {author.biography && author.biography.length > 150 
-                                            ? `${author.biography.substring(0, 150)}...` 
+                                        {author.biography && author.biography.length > 150
+                                            ? `${author.biography.substring(0, 150)}...`
                                             : author.biography || 'No biography available'
                                         }
                                     </p>
@@ -110,14 +110,14 @@ const AuthorList: React.FC = () => {
                                 </div>
                                 <div className="card-footer bg-transparent">
                                     <div className="btn-group w-100" role="group">
-                                        <Link 
-                                            to={`/authors/${author.id}`} 
+                                        <Link
+                                            to={`/authors/${author.id}`}
                                             className="btn btn-outline-primary btn-sm"
                                         >
                                             View
                                         </Link>
-                                        <Link 
-                                            to={`/authors/edit/${author.id}`} 
+                                        <Link
+                                            to={`/authors/edit/${author.id}`}
                                             className="btn btn-outline-secondary btn-sm"
                                         >
                                             Edit
