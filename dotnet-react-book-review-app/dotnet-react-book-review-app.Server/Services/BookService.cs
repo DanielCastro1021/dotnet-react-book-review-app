@@ -50,4 +50,15 @@ public class BookService(ApplicationDbContext context)
     {
         return await context.Books.CountAsync();
     }
+
+    public async Task<IEnumerable<Book>> GetRecentBooksAsync(int count)
+    {
+        return await context.Books.
+            Include(b => b.Author)
+            .Include(b => b.Reviews)
+            .Include(b => b.Category)
+            .OrderByDescending(b => b.PublishedDate)
+            .Take(count)
+            .ToListAsync();
+    }
 }

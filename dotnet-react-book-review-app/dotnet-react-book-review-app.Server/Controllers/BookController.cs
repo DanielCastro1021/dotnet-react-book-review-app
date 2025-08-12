@@ -85,4 +85,11 @@ public class BookController(BookService service) : ControllerBase
         var count = await service.CountAsync();
         return Ok(count);
     }
+    
+    [HttpGet("recent")]
+    public async Task<ActionResult<IEnumerable<Book>>> GetRecentBooks(int count = 5)
+    {
+        var books = await service.GetRecentBooksAsync(count);
+        return Ok(books);
+    }
 }
