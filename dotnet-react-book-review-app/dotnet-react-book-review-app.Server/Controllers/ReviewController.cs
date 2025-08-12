@@ -1,5 +1,6 @@
 using dotnet_react_book_review_app.Server.Models;
 using dotnet_react_book_review_app.Server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet_react_book_review_app.Server.Controllers;
@@ -28,6 +29,7 @@ public class ReviewController(ReviewService service) : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<Review>> CreateReview([FromBody] Review review)
     {
         if (!ModelState.IsValid)
@@ -40,6 +42,7 @@ public class ReviewController(ReviewService service) : ControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [Authorize]
     public async Task<IActionResult> UpdateReview(int id, [FromBody] Review review)
     {
         if (id != review.Id)
@@ -63,6 +66,7 @@ public class ReviewController(ReviewService service) : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize]
     public async Task<IActionResult> DeleteReview(int id)
     {
         var review = await service.GetByIdAsync(id);

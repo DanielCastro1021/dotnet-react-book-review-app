@@ -1,5 +1,6 @@
 using dotnet_react_book_review_app.Server.Models;
 using dotnet_react_book_review_app.Server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet_react_book_review_app.Server.Controllers;
@@ -23,6 +24,7 @@ public class AuthorController(AuthorService service) : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<Author>> CreateAuthor([FromBody] Author author)
     {
         if (!ModelState.IsValid)
@@ -35,6 +37,7 @@ public class AuthorController(AuthorService service) : ControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [Authorize]
     public async Task<ActionResult<Author>> UpdateAuthor(int id, [FromBody] Author author)
     {
         if (id != author.Id)
@@ -58,6 +61,7 @@ public class AuthorController(AuthorService service) : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize]
     public async Task<ActionResult<Author>> DeleteAuthor(int id)
     {
         var author = await service.GetByIdAsync(id);

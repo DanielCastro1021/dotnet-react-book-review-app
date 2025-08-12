@@ -1,5 +1,6 @@
 using dotnet_react_book_review_app.Server.Models;
 using dotnet_react_book_review_app.Server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet_react_book_review_app.Server.Controllers;
@@ -28,6 +29,7 @@ public class CategoryController(CategoryService service) : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<Category>> CreateCategory([FromBody] Category category)
     {
         if (!ModelState.IsValid)
@@ -40,6 +42,7 @@ public class CategoryController(CategoryService service) : ControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [Authorize]
     public async Task<IActionResult> UpdateCategory(int id, [FromBody] Category category)
     {
         if (id != category.Id)
@@ -63,6 +66,7 @@ public class CategoryController(CategoryService service) : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize]
     public async Task<IActionResult> DeleteCategory(int id)
     {
         var category = await service.GetByIdAsync(id);
