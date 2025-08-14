@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-react-book-review-app.Server", "dotnet-react-book-review-app\dotnet-react-book-review-app.Server\dotnet-react-book-review-app.Server.csproj", "{65E8A595-25F3-4697-82DE-4E8CAA90BE0F}"
 EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "dotnet-react-book-review-app.client", "dotnet-react-book-review-app\dotnet-react-book-review-app.client\dotnet-react-book-review-app.client.esproj", "{BEE202D2-DBC4-4B41-B138-0C9A460CC698}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnet-react-book-review-app.Tests", "dotnet-react-book-review-app\dotnet-react-book-review-app.Tests\dotnet-react-book-review-app.Tests.csproj", "{A937340E-6469-4686-B399-9BC48FF48C44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{65E8A595-25F3-4697-82DE-4E8CAA90BE0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65E8A595-25F3-4697-82DE-4E8CAA90BE0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65E8A595-25F3-4697-82DE-4E8CAA90BE0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEE202D2-DBC4-4B41-B138-0C9A460CC698}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEE202D2-DBC4-4B41-B138-0C9A460CC698}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEE202D2-DBC4-4B41-B138-0C9A460CC698}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEE202D2-DBC4-4B41-B138-0C9A460CC698}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{A937340E-6469-4686-B399-9BC48FF48C44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A937340E-6469-4686-B399-9BC48FF48C44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A937340E-6469-4686-B399-9BC48FF48C44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A937340E-6469-4686-B399-9BC48FF48C44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

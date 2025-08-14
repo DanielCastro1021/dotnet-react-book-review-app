@@ -4,29 +4,36 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-    <SpaRoot>..\dotnet-react-book-review-app.client</SpaRoot>
+        <SpaRoot>..\dotnet-react-book-review-app.client</SpaRoot>
         <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
         <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
+        <RuntimeIdentifiers>osx-x64;osx-arm64;linux-x64;win-x64</RuntimeIdentifiers>
+        <!-- Version management -->
+        <AspNetCoreVersion>8.0.19</AspNetCoreVersion>
+        <EntityFrameworkVersion>8.0.19</EntityFrameworkVersion>
+        <SwashbuckleVersion>6.5.0</SwashbuckleVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
-            <Version>8.0.19</Version>
+        <!-- ASP.NET Core Identity -->
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(AspNetCoreVersion)"/>
+
+        <!-- Entity Framework -->
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="$(EntityFrameworkVersion)"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="$(EntityFrameworkVersion)">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.8" />
-        <PackageReference Include="SQLite" Version="3.13.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.1" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.19" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.8">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
+
+        <!-- SPA Proxy -->
+        <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="$(AspNetCoreVersion)"/>
+
+        <!-- API Documentation -->
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="$(SwashbuckleVersion)"/>
     </ItemGroup>
 
     <ItemGroup>
-    <ProjectReference Include="..\dotnet-react-book-review-app.client\dotnet-react-book-review-app.client.esproj">
+        <ProjectReference Include="..\dotnet-react-book-review-app.client\dotnet-react-book-review-app.client.esproj">
             <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
         </ProjectReference>
     </ItemGroup>
